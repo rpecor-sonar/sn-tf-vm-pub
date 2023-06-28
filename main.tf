@@ -86,7 +86,6 @@ resource "azurerm_network_interface_security_group_association" "sn_tf_nic_nsg_a
   network_security_group_id = azurerm_network_security_group.sn_tf_nsg.id
 }
 
-
 # resource "azurerm_windows_virtual_machine" "sn_tf_vm" {
 #   name                = "${local.naming}-win-vm"
 #   resource_group_name = data.azurerm_resource_group.services-rg.name
