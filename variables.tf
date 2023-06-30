@@ -26,7 +26,3 @@ variable "env" {
 variable "admin_pw" {
   type    = string
 }
-
-variable "admin_pw_test" {
-  type    = string
-}

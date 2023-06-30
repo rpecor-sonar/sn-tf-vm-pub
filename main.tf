@@ -110,23 +110,23 @@ resource "azurerm_windows_virtual_machine" "sn_tf_vm" {
   }
 }
 
-# resource "azurerm_postgresql_server" "example" {
-#   name                = "${local.naming}-pgsql"
-#   location            = var.location
-#   resource_group_name = data.azurerm_resource_group.services-rg.name
+resource "azurerm_postgresql_server" "example" {
+  name                = "${local.naming}-pgsql"
+  location            = var.location
+  resource_group_name = data.azurerm_resource_group.services-rg.name
 
-#   administrator_login          = "pgsqladminuser"
-#   administrator_login_password = var.admin_pw
+  administrator_login          = "pgsqladminuser"
+  administrator_login_password = var.admin_pw
 
-#   sku_name   = "GP_Gen5_2"
-#   version    = "11"
-#   storage_mb = 640000
+  sku_name   = "GP_Gen5_2"
+  version    = "11"
+  storage_mb = 640000
 
-#   backup_retention_days        = 7
-#   geo_redundant_backup_enabled = true
-#   auto_grow_enabled            = true
+  backup_retention_days        = 7
+  geo_redundant_backup_enabled = true
+  auto_grow_enabled            = true
 
-#   #public_network_access_enabled    = false
-#   ssl_enforcement_enabled          = true
-#   #ssl_minimal_tls_version_enforced = "TLS1_2"
-# }
+  #public_network_access_enabled    = false
+  ssl_enforcement_enabled          = true
+  #ssl_minimal_tls_version_enforced = "TLS1_2"
+}
