@@ -86,27 +86,34 @@ resource "azurerm_network_interface_security_group_association" "sn_tf_nic_nsg_a
   network_security_group_id = azurerm_network_security_group.sn_tf_nsg.id
 }
 
-# resource "azurerm_windows_virtual_machine" "sn_tf_vm" {
-#   name                = "${local.naming}-win-vm"
-#   resource_group_name = data.azurerm_resource_group.services-rg.name
-#   location            = var.location
-#   size                = "Standard_D2s_v3"
-#   admin_username      = "adminuser"
-#   admin_password      = var.admin_pw
-#   network_interface_ids = [
-#     azurerm_network_interface.sn_tf_nic.id,
-#   ]
+resource "azurerm_windows_virtual_machine" "sn_tf_vm" {
+  name                = "${local.naming}-win-vm"
+  resource_group_name = data.azurerm_resource_group.services-rg.name
+  location            = var.location
+  size                = "Standard_D2s_v3"
+  admin_username      = "adminuser"
+  admin_password      = var.admin_pw
+  network_interface_ids = [
+    azurerm_network_interface.sn_tf_nic.id,
+  ]
 
-#   os_disk {
-#     caching              = "ReadWrite"
-#     storage_account_type = "Standard_LRS"
-#   }
+  os_disk {
+    caching              = "ReadWrite"
+    storage_account_type = "Standard_LRS"
+  }
 
-#   source_image_reference {
-#     publisher = "MicrosoftWindowsDesktop"
-#     offer     = "Windows-11"
-#     sku       = "win11-21h2-pro"
-#     version   = "latest"
-#   }
-# }
+  source_image_reference {
+    publisher = "MicrosoftWindowsDesktop"
+    offer     = "Windows-11"
+    sku       = "win11-21h2-pro"
+    version   = "latest"
+  }
+}
 
+resource "azurerm_storage_account" "sn_tf_sa" {
+  name                     = "storageaccountname"
+  resource_group_name      = data.azurerm_resource_group.services-rg.name
+  location                 = var.location
+  account_tier             = "Standard"
+  account_replication_type = "GRS"
+}
