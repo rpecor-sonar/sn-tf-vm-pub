@@ -128,5 +128,5 @@ resource "azurerm_postgresql_server" "pgsql" {
 
   #public_network_access_enabled    = false
   ssl_enforcement_enabled          = true
-  ssl_minimal_tls_version_enforced = "TLS1_2"
+  #ssl_minimal_tls_version_enforced = "TLS1_2"
 }
