@@ -20,8 +20,13 @@ locals {
   }
 }
 
-data "azurerm_resource_group" "services-rg" {
-  name = "rg-services-01"
+# data "azurerm_resource_group" "services-rg" {
+#   name = "rg-services-01"
+# }
+
+resource "azurerm_resource_group" "sn_tf_rg" {
+  name = "${local.naming}-rg"
+  location = var.location
 }
 
 # Create virtual network
@@ -29,13 +34,14 @@ resource "azurerm_virtual_network" "core-vnet" {
   name                = "${local.naming}-vnet"
   address_space       = ["10.0.0.0/26"]
   location            = var.location
-  resource_group_name = data.azurerm_resource_group.services-rg.name
+  #resource_group_name = data.azurerm_resource_group.services-rg.name
+  resource_group_name = azurerm_resource_group.sn_tf_rg.name
 }
 
 # Create subnet
 resource "azurerm_subnet" "subnet_one" {
   name                 = "${local.naming}-subnet1"
-  resource_group_name  = data.azurerm_resource_group.services-rg.name
+  resource_group_name  = azurerm_resource_group.sn_tf_rg.name
   virtual_network_name = azurerm_virtual_network.core-vnet.name
   address_prefixes     = ["10.0.0.0/28"]
 }
@@ -44,7 +50,7 @@ resource "azurerm_subnet" "subnet_one" {
 resource "azurerm_public_ip" "windows_ip" {
   name                = "${local.naming}-pip"
   location            = var.location
-  resource_group_name = data.azurerm_resource_group.services-rg.name
+  resource_group_name = azurerm_resource_group.sn_tf_rg.name
   allocation_method   = "Dynamic"
 }
 
@@ -52,7 +58,7 @@ resource "azurerm_public_ip" "windows_ip" {
 resource "azurerm_network_security_group" "sn_tf_nsg" {
   name                = "${local.naming}-nsg"
   location            = var.location
-  resource_group_name = data.azurerm_resource_group.services-rg.name
+  resource_group_name = azurerm_resource_group.sn_tf_rg.name
 
   security_rule {
     name                       = "RDP"
@@ -71,7 +77,7 @@ resource "azurerm_network_security_group" "sn_tf_nsg" {
 resource "azurerm_network_interface" "sn_tf_nic" {
   name                = "${local.naming}-nic"
   location            = var.location
-  resource_group_name = data.azurerm_resource_group.services-rg.name
+  resource_group_name = azurerm_resource_group.sn_tf_rg.name
 
   ip_configuration {
     name                          = "${local.naming}-nic-ip"
@@ -88,7 +94,7 @@ resource "azurerm_network_interface_security_group_association" "sn_tf_nic_nsg_a
 
 resource "azurerm_windows_virtual_machine" "sn_tf_vm" {
   name                = "${local.naming}-win-vm"
-  resource_group_name = data.azurerm_resource_group.services-rg.name
+  resource_group_name = azurerm_resource_group.sn_tf_rg.name
   location            = var.location
   size                = "Standard_D2s_v3"
   admin_username      = "adminuser"
@@ -113,7 +119,7 @@ resource "azurerm_windows_virtual_machine" "sn_tf_vm" {
 resource "azurerm_postgresql_server" "pgsql" {
   name                = "${local.naming}-pgsql"
   location            = var.location
-  resource_group_name = data.azurerm_resource_group.services-rg.name
+  resource_group_name = azurerm_resource_group.sn_tf_rg.name
 
   administrator_login          = "pgsqladminuser"
   administrator_login_password = var.admin_pw
