@@ -68,7 +68,7 @@ resource "azurerm_network_security_group" "sn_tf_nsg" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "3389"
-    source_address_prefix      = "*"
+    source_address_prefix      = ["1.2.3.0/24"]
     destination_address_prefix = "*"
   }
 }
